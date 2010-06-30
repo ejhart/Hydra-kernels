@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<manifest>
+  <remote name="korg" fetch="git://android.git.kernel.org/" review="review.source.android.com"/>
+  <remote name="github" fetch="git://github.com/" />
+  <remote name="gitorious" fetch="git://gitorious.org" />
+  <remote name="codea" fetch="git://codeaurora.org/platform/" />
+
+  <default revision="master" remote="github"/>
+<project path="OpCode1300/Hydra-kernel" name="Hydra-kernel" revision="master"/>
+</manifest>
+
+
