@@ -76,7 +76,6 @@ struct clkctl_acpu_speed acpu_freq_tbl[] = {
 	{  19200, CCTL(CLK_TCXO, 1),		SRC_RAW, 0, 0, 950, 14000},
 	{ 128000, CCTL(CLK_TCXO, 1),		SRC_AXI, 0, 0, 950, 14000 },
 	{ 245000, CCTL(CLK_MODEM_PLL, 1),	SRC_RAW, 0, 0, 950, 29000 },
-	/*{ 256000, CCTL(CLK_GLOBAL_PLL, 3),	SRC_RAW, 0, 0, 950, 29000 },*/
 	{ 384000, CCTL(CLK_TCXO, 1),		SRC_SCPLL, 0x0A, 0, 975, 58000 },
 	{ 422400, CCTL(CLK_TCXO, 1),		SRC_SCPLL, 0x0B, 0, 1000, 117000 },
 	{ 460800, CCTL(CLK_TCXO, 1),		SRC_SCPLL, 0x0C, 0, 1025, 117000 },
@@ -92,12 +91,11 @@ struct clkctl_acpu_speed acpu_freq_tbl[] = {
 	{ 844800, CCTL(CLK_TCXO, 1),		SRC_SCPLL, 0x16, 0, 1225, 128000 },
 	{ 883200, CCTL(CLK_TCXO, 1),		SRC_SCPLL, 0x17, 0, 1250, 128000 },
 	{ 921600, CCTL(CLK_TCXO, 1),		SRC_SCPLL, 0x18, 0, 1250, 128000 },
-	{ 960000, CCTL(CLK_TCXO, 1),		SRC_SCPLL, 0x19, 0, 1250, 128000 },
+	{ 960000, CCTL(CLK_TCXO, 1),		SRC_SCPLL, 0x19, 0, 1275, 128000 },
 	{ 998400, CCTL(CLK_TCXO, 1),		SRC_SCPLL, 0x1A, 0, 1275, 128000 },
-	{ 1036800, CCTL(CLK_TCXO, 1),		SRC_SCPLL, 0x1B, 0, 1275, 128000 },
-	{ 1075200, CCTL(CLK_TCXO, 1),		SRC_SCPLL, 0x1C, 0, 1275, 128000 },
-	{ 1113600, CCTL(CLK_TCXO, 1),		SRC_SCPLL, 0x1D, 0, 1300, 128000 },
-	{ 1152000, CCTL(CLK_TCXO, 1),		SRC_SCPLL, 0x1E, 0, 1300, 128000 },
+	{ 1036800, CCTL(CLK_TCXO, 1),		SRC_SCPLL, 0x1B, 0, 1300, 128000 },
+	{ 1075200, CCTL(CLK_TCXO, 1),		SRC_SCPLL, 0x1C, 0, 1300, 128000 },
+	{ 1113600, CCTL(CLK_TCXO, 1),		SRC_SCPLL, 0x1D, 0, 1325, 128000 },
 	{ 0 },
 };
 
@@ -121,7 +119,7 @@ static void __init acpuclk_init_cpufreq_table(void)
 		freq_table[i].index = i;
 		freq_table[i].frequency = CPUFREQ_ENTRY_INVALID;
 
-		/* Skip speeds using the global pll */
+		/* Define speeds we want to skip */
 		if (acpu_freq_tbl[i].acpu_khz == 256000 ||
 				acpu_freq_tbl[i].acpu_khz == 19200)
 			continue;
@@ -134,8 +132,8 @@ static void __init acpuclk_init_cpufreq_table(void)
 			continue;
 		}
 
-		/* Take the fastest speed available at the specified VDD level */
-		if (vdd != acpu_freq_tbl[i + 1].vdd)
+		/* Add to the table */
+		/*if (vdd != acpu_freq_tbl[i + 1].vdd)*/
 			freq_table[i].frequency = acpu_freq_tbl[i].acpu_khz;
 	}
 
@@ -431,7 +429,7 @@ void __init acpu_freq_tbl_fixup(void)
 	}
 	
 	/* Override the fixup because we're overclocking */
-	max_acpu_khz = 1152000;
+	max_acpu_khz = 1113600;
 	
 	/* pr_info("Max ACPU freq is %d KHz\n", max_acpu_khz); */
 
