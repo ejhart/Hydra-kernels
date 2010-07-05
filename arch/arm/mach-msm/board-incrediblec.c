@@ -556,6 +556,13 @@ static struct platform_device android_pmem_camera_device = {
 		.platform_data = &android_pmem_camera_pdata,
 	},
 };
+static struct platform_device android_pmem_venc_device = {
+	.name		= "android_pmem",
+	.id		= 6,
+	.dev		= {
+		.platform_data = &android_pmem_venc_pdata,
+	},
+};
 
 static struct resource ram_console_resources[] = {
 	{
@@ -681,7 +688,7 @@ static struct regulator_init_data tps65023_data[5] = {
 		.constraints = {
 			.name = "dcdc1", /* VREG_MSMC2_1V29 */
 			.min_uV = 950000,
-			.max_uV = 1300000,
+			.max_uV = 1325000,
 			.valid_ops_mask = REGULATOR_CHANGE_VOLTAGE,
 		},
 		.consumer_supplies = tps65023_dcdc1_supplies,
@@ -1307,7 +1314,9 @@ static struct platform_device *devices[] __initdata = {
 	&msm_device_i2c,
 	&incrediblec_flashlight_device,
 	&incrediblec_leds,
-
+#ifdef CONFIG_720P_CAMERA
+	&android_pmem_venc_device,
+#endif
 #if defined(CONFIG_SPI_QSD)
 	&qsd_device_spi,
 #endif

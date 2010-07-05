@@ -26,6 +26,7 @@
 #define NUM_WB_EXP_NEUTRAL_REGION_LINES 4
 #define NUM_WB_EXP_STAT_OUTPUT_BUFFERS  3
 #define NUM_AUTOFOCUS_MULTI_WINDOW_GRIDS 16
+#define NUM_STAT_OUTPUT_BUFFERS      3
 #define NUM_AF_STAT_OUTPUT_BUFFERS      3
 
 enum msm_queue {
@@ -39,8 +40,15 @@ enum vfe_resp_msg {
 	VFE_EVENT,
 	VFE_MSG_GENERAL,
 	VFE_MSG_SNAPSHOT,
+#ifndef CONFIG_720P_CAMERA
 	VFE_MSG_OUTPUT1,
 	VFE_MSG_OUTPUT2,
+#else
+	VFE_MSG_OUTPUT_P,   /* preview (continuous mode ) */
+	VFE_MSG_OUTPUT_T,   /* thumbnail (snapshot mode )*/
+	VFE_MSG_OUTPUT_S,   /* main image (snapshot mode )*/
+	VFE_MSG_OUTPUT_V,   /* video   (continuous mode ) */
+#endif
 	VFE_MSG_STATS_AF,
 	VFE_MSG_STATS_WE,
 };
@@ -49,6 +57,7 @@ struct msm_vfe_phy_info {
 	uint32_t sbuf_phy;
 	uint32_t y_phy;
 	uint32_t cbcr_phy;
+	uint8_t  output_id; /* VFE31_OUTPUT_MODE_PT/S/V */
 };
 
 struct msm_vfe_resp {
@@ -197,6 +206,9 @@ struct msm_pmem_region {
 struct axidata {
 	uint32_t bufnum1;
 	uint32_t bufnum2;
+#ifdef CONFIG_720P_CAMERA
+	uint32_t bufnum3;
+#endif
 	struct msm_pmem_region *region;
 };
 
@@ -229,7 +241,6 @@ enum msm_camio_clk_type {
 	CAMIO_MDC_CLK,
 	CAMIO_VFE_CLK,
 	CAMIO_VFE_AXI_CLK,
-
 	CAMIO_MAX_CLK
 };
 
